@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.apache.ibatis.type.Alias;
 
 import com.xdf.vps.annotation.alias.Column;
+import com.xdf.vps.annotation.alias.ID;
 import com.xdf.vps.annotation.alias.Table;
 
 @Alias("Student")
@@ -13,6 +14,7 @@ public class Student implements Serializable {
 
 	private static final long serialVersionUID = -78007369487296020L;
 	
+	@ID
 	@Column(name="id",nullable=false)
 	private String id;
 	

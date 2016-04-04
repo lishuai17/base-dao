@@ -9,12 +9,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Column{
+public @interface ID {
 	
 	public String name() default "";
-	
-	public boolean unique() default false;
-	
-	public boolean nullable() default true;
 
 }
