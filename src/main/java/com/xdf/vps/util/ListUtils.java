@@ -30,13 +30,13 @@ public class ListUtils {
 		return rlt.toString();
 	}
 	
-	public static String ListObj2String(List<Object> list){
+	public static String ListObj2String(List<String> list){
 		StringBuilder rlt = new StringBuilder();
 		if(list == null || list.size() == 0){
 			return rlt.toString();
 		}
 		for(Object str : list){
-			rlt.append("'").append(str).append("',");
+			rlt.append("#{").append(str).append("},");
 		}
 		if(rlt.charAt(rlt.length()-1) == ','){
 			rlt.deleteCharAt(rlt.length()-1);
@@ -44,11 +44,27 @@ public class ListUtils {
 		return rlt.toString();
 	}
 	
+	public static String ListFilter2String(List<String> list){
+		StringBuilder rlt = new StringBuilder();
+		if(list == null || list.size() == 0){
+			return rlt.toString();
+		}
+		for (int i = 0; i < list.size(); i++) {
+			String str = list.get(i);
+			if(i != 0){
+				rlt.append(" and ");
+			}
+			rlt.append(str);
+		}
+		
+		return rlt.toString();
+	}
+	
 	public static void main(String[] args) {
 		List<String> a = new ArrayList<>();
 		a.add("a");
 		a.add("b");
-		System.out.println("rlt: " + List2String(a));
+		System.out.println("rlt: " + ListObj2String(a));
 	}
 
 }
