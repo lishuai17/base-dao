@@ -15,12 +15,12 @@ public class Student implements Serializable {
 	private static final long serialVersionUID = -78007369487296020L;
 	
 	@ID
-	@Column(name="id",nullable=false)
 	private String id;
 	
 	@Column(name="stu_number",nullable=false)
 	private String studentNumber;
 	
+	@Column(name="name",nullable=false)
 	private String studentName;
 	
 

@@ -13,41 +13,41 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
-/**
- * @author lishuai
- * mybatis 拦截器
- *
- */
 @Intercepts({
-		@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
-				RowBounds.class, ResultHandler.class }),
-		@Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }) })
-
+		@Signature(type = Executor.class, method = "query", args = {
+				MappedStatement.class, Object.class, RowBounds.class,
+				ResultHandler.class }),
+		@Signature(type = Executor.class, method = "update", args = {
+				MappedStatement.class, Object.class }) })
 public class MappInterceptor implements Interceptor {
-	private final static String _sql_regex = ".*MapperGD.*";
+	
+	private final static String _sql_regex = "MAPPER_";
 
 	private void processIntercept(final Object[] queryArgs) {
 		final MappedStatement ms = (MappedStatement) queryArgs[0];
 		final Object parameter = queryArgs[1];
 		String mapperSQL = ms.getBoundSql(parameter).getSql();
 		BoundSql boundSQL = ms.getBoundSql(parameter);
-
-		String resource = ms.getResource();
-		Class<?> entityclazz = MappedStatmentHelper.getEntityClazz(resource);
-		queryArgs[0] = MappedStatmentHelper.setMSReturnSetMap(ms, entityclazz);
-
-		boolean interceptor = mapperSQL.matches(_sql_regex);
+		
+		boolean interceptor = mapperSQL.startsWith(_sql_regex);
 		if (!interceptor) {
 			return;
 		}
+
+		Class<?> entityclazz = MappedStatmentHelper.getEntityClazz(mapperSQL);
+		MappedStatmentHelper.setResultType(ms, entityclazz);
+
 		if (entityclazz == null) {
-			throw new RuntimeException("使用公共dao必須給mapper接口的@MyBatisRepository(User.class) 注解設置值.");
+			throw new RuntimeException("");
 		}
 
-		String new_sql = MapperSqlHelper.getExecuSQL(entityclazz, mapperSQL, parameter);
+		String new_sql = MapperSqlHelper.getExecuSQL(entityclazz, mapperSQL,
+				parameter);
 
-		BoundSql newBoundSql = MappedStatmentHelper.copyFromBoundSql(ms, boundSQL, new_sql);
-		MappedStatement newMs = MappedStatmentHelper.copyFromMappedStatement(ms, newBoundSql);
+		BoundSql newBoundSql = MappedStatmentHelper.copyFromBoundSql(ms,
+				boundSQL, new_sql);
+		MappedStatement newMs = MappedStatmentHelper.copyFromMappedStatement(
+				ms, newBoundSql);
 		queryArgs[0] = newMs;
 
 	}

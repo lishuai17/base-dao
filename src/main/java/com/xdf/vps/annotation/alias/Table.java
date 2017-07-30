@@ -16,5 +16,10 @@ public @interface Table {
      * @return
      */
     public String name() default "className";
+    
+//    public abstract String catalog();
+//
+//    public abstract String schema();
+
 
 }
